@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Escape</string>
+    <string name="greeting">Escape!</string>
+    <string name="check_start_game">Do you really want to play?</string>
+    <string name="warn_msg">Something happen!</string>
+
+</resources>
