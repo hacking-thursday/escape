@@ -1,5 +1,6 @@
 package tw.h4.game.escape;
 
+import tw.h4.game.escape.pages.WarningActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

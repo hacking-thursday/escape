@@ -1,5 +1,8 @@
-package tw.h4.game.escape;
+package tw.h4.game.escape.pages;
 
+import tw.h4.game.escape.AlarmHelper;
+import tw.h4.game.escape.GamePreference;
+import tw.h4.game.escape.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
