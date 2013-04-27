@@ -26,10 +26,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".pages.StartGameActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
+            android:name=".pages.WaitingActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
             android:name=".pages.WarningActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
 
         <receiver
             android:name=".SignalReceiver"
