@@ -27,9 +27,9 @@ public class DisasterEngine {
 		Type[] types = Type.values();
 		Class<? extends Object> kls;
 		if (types.length < type) {
-			kls = types[0].getClass();
+			kls = types[0].getTypeClass();
 		} else {
-			kls = types[type].getClass();
+			kls = types[type].getTypeClass();
 		}
 		Disaster obj = null;
 		try {

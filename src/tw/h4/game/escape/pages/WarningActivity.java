@@ -3,6 +3,7 @@ package tw.h4.game.escape.pages;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import tw.h4.game.escape.Debugger;
 import tw.h4.game.escape.GamePreference;
 import tw.h4.game.escape.R;
 import tw.h4.game.escape.disaster.Disaster;
@@ -14,6 +15,7 @@ import android.os.Message;
 import android.widget.TextView;
 
 public class WarningActivity extends Activity {
+	private static final String TAG = "WarningActivity";
 
 	private static CounterHandler mHandler = null;
 	private static final int UPDATE_TIME = 0x100;
@@ -66,16 +68,15 @@ public class WarningActivity extends Activity {
 		Disaster dstr = (new DisasterEngine(this)).getDisaster(type);
 
 		long escapeTime = dstr.getEscapeTime();
-		if ((-1 != prevRecodeTime)
-		        && (currTime > prevRecodeTime + (escapeTime - prevElapsedTime)
-		                / timeSpeed)) {
-			// TODO: game over
-			return;
-		}
+		Debugger.d(TAG, "onResume");
 		if (-1 == prevRecodeTime) {
-			long eventTime = pref.getEventTime();
-			prevRecodeTime = eventTime;
+			prevRecodeTime = pref.getEventTime();
 			prevElapsedTime = 0;
+		} else if (currTime > prevRecodeTime + (escapeTime - prevElapsedTime)
+		        / timeSpeed) {
+			// TODO: game over
+			Debugger.d(TAG, "Game over");
+			return;
 		}
 		reminderTime = (int) ((escapeTime - prevElapsedTime) / 1000);
 		pref.setPrevRecordTime(currTime);
@@ -83,9 +84,9 @@ public class WarningActivity extends Activity {
 		        / timeSpeed);
 		showTimer();
 		reminderTime--;
-		startTimer(1000 - (prevElapsedTime / 1000));
+		startTimer(1000 - (prevElapsedTime % 1000));
 	}
-	
+
 	protected void onPause() {
 		mHandler.removeCallbacks(action);
 		super.onPause();
