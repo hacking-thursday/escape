@@ -1,5 +1,7 @@
 package tw.h4.game.escape.disaster;
 
+import android.content.Context;
+
 public class Earthquake extends Disaster {
 
 	/**
@@ -12,10 +14,18 @@ public class Earthquake extends Disaster {
 	}
 
 	/**
-	 * @see Disaster#getReminderTime()
+	 * @see Disaster#getEscapeTime()
 	 */
 	@Override
-	public int getReminderTime() {
-		return 180;
+	public long getEscapeTime() {
+		return 180000l;
+	}
+
+	/**
+	 * @see Disaster#getDisasterName(Context ctx)
+	 */
+	@Override
+	public String getDisasterName(Context ctx) {
+		return "Earthquake";
 	}
 }

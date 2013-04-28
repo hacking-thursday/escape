@@ -1,5 +1,7 @@
 package tw.h4.game.escape.disaster;
 
+import android.content.Context;
+
 /**
  * This class defines a disaster behavior and member.
  * 
@@ -44,5 +46,14 @@ public abstract class Disaster {
 	 * 
 	 * @return The reminder time count by minutes
 	 */
-	public abstract int getReminderTime();
+	public abstract long getEscapeTime();
+
+	/**
+	 * Get current disaster type name.
+	 * 
+	 * @param ctx
+	 *            use to get Resources.
+	 * @return The name of current disaster.
+	 */
+	public abstract String getDisasterName(Context ctx);
 }

@@ -2,7 +2,7 @@ package tw.h4.game.escape.disaster;
 
 import android.content.Context;
 
-public class VolcanicEruptions extends Disaster {
+public class NuclearDisaster extends Disaster {
 
 	/**
 	 * @see Disaster#getHpHit()
@@ -10,7 +10,7 @@ public class VolcanicEruptions extends Disaster {
 	@Override
 	public int getHpHit(long t1, double lon1, double lat1, long t2,
 	        double lon2, double lat2) {
-		// TODO Auto-generated method stub
+		// TODO: complete this function
 		return 0;
 	}
 
@@ -19,7 +19,7 @@ public class VolcanicEruptions extends Disaster {
 	 */
 	@Override
 	public long getEscapeTime() {
-		return 3600000l;
+		return 18000000l;
 	}
 
 	/**

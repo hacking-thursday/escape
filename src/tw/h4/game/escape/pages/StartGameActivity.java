@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class StartGameActivity extends Activity {
-	private static final long MAX_INTEVAL = 60;
+	private static final long MAX_INTEVAL = 10;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

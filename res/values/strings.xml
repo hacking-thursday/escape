@@ -11,4 +11,11 @@
     <string name="warn_msg">Something happen!</string>
     <string name="waiting_msg">Disaster will happen at any time.</string>
 
+    <!-- disaster name -->
+    <string name="disaster_happen">%s happens!</string>
+    <string name="disaster_earthquake">Earthquake</string>
+    <string name="disaster_nuclear_disaster">Nuclear disaster</string>
+    <string name="disaster_tsunami">Tsunami</string>
+    <string name="disaster_volcanic_eruptions">Volcanic Eruptions</string>
+
 </resources>

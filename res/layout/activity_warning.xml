@@ -15,4 +15,12 @@
         android:layout_centerInParent="true"
         android:text="@string/warn_msg" />
 
+    <TextView
+        android:id="@+id/warn_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/warn_msg"
+        android:layout_centerHorizontal="true"
+        android:textIsSelectable="false" />
+
 </RelativeLayout>
