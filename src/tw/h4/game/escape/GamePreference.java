@@ -45,6 +45,7 @@ public class GamePreference {
 		Editor editor = pref.edit();
 		editor.putLong(PREV_RECORD_TIME, time);
 		editor.commit();
+		Debugger.d("GamePreference", "record time::" + time);
 	}
 
 	public long getPrevRecordTime() {
@@ -55,6 +56,7 @@ public class GamePreference {
 		Editor editor = pref.edit();
 		editor.putLong(PREV_ELAPSED_TIME, time);
 		editor.commit();
+        Debugger.d("GamePreference", "elapsed time::" + time);
 	}
 
 	public long getPrevElapsedTime() {

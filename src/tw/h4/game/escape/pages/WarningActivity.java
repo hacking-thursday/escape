@@ -70,8 +70,10 @@ public class WarningActivity extends Activity {
 		long escapeTime = dstr.getEscapeTime();
 		Debugger.d(TAG, "onResume");
 		if (-1 == prevRecodeTime) {
-			prevRecodeTime = pref.getEventTime();
+			prevRecodeTime = currTime;
 			prevElapsedTime = 0;
+	        pref.setPrevRecordTime(currTime);
+	        pref.setPrevElapsedTime(0);
 		} else if (currTime > prevRecodeTime + (escapeTime - prevElapsedTime)
 		        / timeSpeed) {
 			// TODO: game over
@@ -79,9 +81,6 @@ public class WarningActivity extends Activity {
 			return;
 		}
 		reminderTime = (int) ((escapeTime - prevElapsedTime) / 1000);
-		pref.setPrevRecordTime(currTime);
-		pref.setPrevElapsedTime(prevElapsedTime + (currTime - prevRecodeTime)
-		        / timeSpeed);
 		showTimer();
 		reminderTime--;
 		startTimer(1000 - (prevElapsedTime % 1000));
@@ -89,6 +88,16 @@ public class WarningActivity extends Activity {
 
 	protected void onPause() {
 		mHandler.removeCallbacks(action);
+		// TODO: save elapsed time
+		long currTime = System.currentTimeMillis();
+        GamePreference pref = GamePreference.getInstance(WarningActivity.this);
+        int timeSpeed = pref.getTimeSpeed();
+        long prevElapsedTime = pref.getPrevElapsedTime();
+        long prevRecodeTime = pref.getPrevRecordTime();
+        pref.setPrevRecordTime(currTime);
+        pref.setPrevElapsedTime(prevElapsedTime + (currTime - prevRecodeTime)
+                / timeSpeed);
+        
 		super.onPause();
 	}
 
