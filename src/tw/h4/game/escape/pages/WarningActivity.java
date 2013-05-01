@@ -54,6 +54,7 @@ public class WarningActivity extends Activity {
 		setContentView(R.layout.activity_warning);
 		mHandler = new CounterHandler(this);
 		txtTimer = (TextView) findViewById(R.id.warn_time);
+		// TODO: get location here?
 	}
 
 	@Override
@@ -68,17 +69,16 @@ public class WarningActivity extends Activity {
 		Disaster dstr = (new DisasterEngine(this)).getDisaster(type);
 
 		long escapeTime = dstr.getEscapeTime();
+		long elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
+		        / timeSpeed;
 		if (-1 == prevRecodeTime) {
 			prevRecodeTime = currTime;
 			prevElapsedTime = 0;
-		} else if (currTime > prevRecodeTime + (escapeTime - prevElapsedTime)
-		        / timeSpeed) {
+		} else if (elaspsedTime > escapeTime) {
 			// TODO: game over
 			Debugger.d(TAG, "Game over");
 			return;
 		}
-		long elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
-		        / timeSpeed;
 		long reminderTimeMS = escapeTime - elaspsedTime;
 		reminderTime = (int) (reminderTimeMS / 1000);
 		pref.setPrevElapsedTime(elaspsedTime);

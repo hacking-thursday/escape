@@ -14,10 +14,10 @@ public class SignalReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Debugger.d(TAG, "get action::" + action);
         if (DISASTER_START.equals(action)) {
+            // launch WarningActivity
             Intent activity = new Intent(ctx, WarningActivity.class);
             activity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ctx.startActivity(activity);
-            // TODO: launch WarningActivity
         } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             // TODO: check the disaster start time
         }
