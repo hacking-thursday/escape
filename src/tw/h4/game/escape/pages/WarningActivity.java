@@ -39,7 +39,7 @@ public class WarningActivity extends Activity {
 				targetObj.showTimer();
 				targetObj.reminderTime--;
 				if (0 == targetObj.reminderTime) {
-					removeCallbacks(targetObj.action);
+					removeCallbacks(action);
 				} else {
 					targetObj.startTimer(1000);
 				}
@@ -68,40 +68,42 @@ public class WarningActivity extends Activity {
 		Disaster dstr = (new DisasterEngine(this)).getDisaster(type);
 
 		long escapeTime = dstr.getEscapeTime();
-		Debugger.d(TAG, "onResume");
 		if (-1 == prevRecodeTime) {
 			prevRecodeTime = currTime;
 			prevElapsedTime = 0;
-	        pref.setPrevRecordTime(currTime);
-	        pref.setPrevElapsedTime(0);
 		} else if (currTime > prevRecodeTime + (escapeTime - prevElapsedTime)
 		        / timeSpeed) {
 			// TODO: game over
 			Debugger.d(TAG, "Game over");
 			return;
 		}
-		reminderTime = (int) ((escapeTime - prevElapsedTime) / 1000);
+		long elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
+		        / timeSpeed;
+		long reminderTimeMS = escapeTime - elaspsedTime;
+		reminderTime = (int) (reminderTimeMS / 1000);
+		pref.setPrevElapsedTime(elaspsedTime);
+		pref.setPrevRecordTime(currTime);
 		showTimer();
 		reminderTime--;
-		startTimer(1000 - (prevElapsedTime % 1000));
+		startTimer(1000 - (reminderTimeMS % 1000));
 	}
 
 	protected void onPause() {
 		mHandler.removeCallbacks(action);
 		// TODO: save elapsed time
 		long currTime = System.currentTimeMillis();
-        GamePreference pref = GamePreference.getInstance(WarningActivity.this);
-        int timeSpeed = pref.getTimeSpeed();
-        long prevElapsedTime = pref.getPrevElapsedTime();
-        long prevRecodeTime = pref.getPrevRecordTime();
-        pref.setPrevRecordTime(currTime);
-        pref.setPrevElapsedTime(prevElapsedTime + (currTime - prevRecodeTime)
-                / timeSpeed);
-        
+		GamePreference pref = GamePreference.getInstance(WarningActivity.this);
+		int timeSpeed = pref.getTimeSpeed();
+		long prevElapsedTime = pref.getPrevElapsedTime();
+		long prevRecodeTime = pref.getPrevRecordTime();
+		pref.setPrevRecordTime(currTime);
+		pref.setPrevElapsedTime(prevElapsedTime + (currTime - prevRecodeTime)
+		        / timeSpeed);
+
 		super.onPause();
 	}
 
-	private Runnable action = new Runnable() {
+	private static Runnable action = new Runnable() {
 		@Override
 		public void run() {
 			Message msg = new Message();
