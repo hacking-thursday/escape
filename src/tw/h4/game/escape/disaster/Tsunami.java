@@ -27,6 +27,6 @@ public class Tsunami extends Disaster {
 	 */
 	@Override
 	public String getDisasterName(Context ctx) {
-		return "Earthquake";
+		return "Tsunami";
 	}
 }

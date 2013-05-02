@@ -6,13 +6,13 @@ public class DisasterEngine {
 	public enum Type {
 		NUCLEAR_DISASTER(NuclearDisaster.class), ERATHQUAKE(Earthquake.class), TSUNAMI(
 		        Tsunami.class), VOLCAIC_ERUPTIONS(VolcanicEruptions.class);
-		private Class<? extends Object> kls;
+		private Class<? extends Disaster> kls;
 
-		private Type(Class<? extends Object> klass) {
+		private Type(Class<? extends Disaster> klass) {
 			kls = klass;
 		}
 
-		public Class<? extends Object> getTypeClass() {
+		public Class<? extends Disaster> getTypeClass() {
 			return kls;
 		}
 	}
@@ -25,7 +25,7 @@ public class DisasterEngine {
 
 	public Disaster getDisaster(int type) {
 		Type[] types = Type.values();
-		Class<? extends Object> kls;
+		Class<? extends Disaster> kls;
 		if (types.length < type) {
 			kls = types[0].getTypeClass();
 		} else {
@@ -33,7 +33,7 @@ public class DisasterEngine {
 		}
 		Disaster obj = null;
 		try {
-			obj = (Disaster) kls.newInstance();
+			obj = kls.newInstance();
 			// TODO: set source here
 		} catch (InstantiationException e) {
 			e.printStackTrace();

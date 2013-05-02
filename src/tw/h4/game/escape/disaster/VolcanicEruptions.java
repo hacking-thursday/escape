@@ -27,6 +27,6 @@ public class VolcanicEruptions extends Disaster {
 	 */
 	@Override
 	public String getDisasterName(Context ctx) {
-		return "Earthquake";
+		return "Volcanic eruptions";
 	}
 }
