@@ -18,7 +18,7 @@ public class Debugger {
 
     public static void d(String tag, String msg) {
         if (0 != (LOG_LEVEL & DEBUG))
-            Log.v(TAG + tag, msg);
+            Log.d(TAG + tag, msg);
     }
 
     public static void i(String tag, String msg) {

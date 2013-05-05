@@ -23,4 +23,13 @@
         android:layout_centerHorizontal="true"
         android:textIsSelectable="false" />
 
+    <Button
+        android:id="@+id/btn_cancel_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/warn_time"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:text="@android:string/cancel" />
+
 </RelativeLayout>

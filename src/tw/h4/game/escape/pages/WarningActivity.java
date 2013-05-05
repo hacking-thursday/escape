@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.TextView;
 
 public class WarningActivity extends Activity {
@@ -20,6 +21,7 @@ public class WarningActivity extends Activity {
 	private static CounterHandler mHandler = null;
 	private static final int UPDATE_TIME = 0x100;
 	private int reminderTime = 0;
+	private boolean needRecord = true;
 	private TextView txtTimer;
 
 	private static class CounterHandler extends Handler {
@@ -48,6 +50,18 @@ public class WarningActivity extends Activity {
 		}
 	}
 
+	public void onClick(View view) {
+		int id = view.getId();
+		switch (id) {
+		case R.id.btn_cancel_game:
+			GamePreference pref = GamePreference.getInstance(this);
+			pref.removeEvent();
+			mHandler.removeCallbacks(action);
+			needRecord = false;
+			break;
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,18 +82,22 @@ public class WarningActivity extends Activity {
 		int type = pref.getEventType();
 		Disaster dstr = (new DisasterEngine(this)).getDisaster(type);
 
-		long escapeTime = dstr.getEscapeTime();
-		long elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
-		        / timeSpeed;
+		long escapeTime = dstr.getEscapeTime(), elaspsedTime = 0;
+		Debugger.d(TAG, "name:" + dstr.getDisasterName(this));
 		if (-1 == prevRecodeTime) {
 			prevRecodeTime = currTime;
 			prevElapsedTime = 0;
-		} else if (elaspsedTime > escapeTime) {
-			// TODO: game over
-			Debugger.d(TAG, "Game over");
-			return;
+		} else {
+			elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
+			        / timeSpeed;
+			if (elaspsedTime > escapeTime) {
+				// TODO: game over
+				Debugger.d(TAG, "Game over:" + elaspsedTime);
+				return;
+			}
 		}
 		long reminderTimeMS = escapeTime - elaspsedTime;
+		Debugger.d(TAG, "reminder time:" + reminderTimeMS);
 		reminderTime = (int) (reminderTimeMS / 1000);
 		pref.setPrevElapsedTime(elaspsedTime);
 		pref.setPrevRecordTime(currTime);
@@ -89,17 +107,19 @@ public class WarningActivity extends Activity {
 	}
 
 	protected void onPause() {
-		mHandler.removeCallbacks(action);
-		// TODO: save elapsed time
-		long currTime = System.currentTimeMillis();
-		GamePreference pref = GamePreference.getInstance(WarningActivity.this);
-		int timeSpeed = pref.getTimeSpeed();
-		long prevElapsedTime = pref.getPrevElapsedTime();
-		long prevRecodeTime = pref.getPrevRecordTime();
-		pref.setPrevRecordTime(currTime);
-		pref.setPrevElapsedTime(prevElapsedTime + (currTime - prevRecodeTime)
-		        / timeSpeed);
-
+		if (needRecord) {
+			mHandler.removeCallbacks(action);
+			// TODO: save elapsed time
+			long currTime = System.currentTimeMillis();
+			GamePreference pref = GamePreference
+			        .getInstance(WarningActivity.this);
+			int timeSpeed = pref.getTimeSpeed();
+			long prevElapsedTime = pref.getPrevElapsedTime();
+			long prevRecodeTime = pref.getPrevRecordTime();
+			pref.setPrevRecordTime(currTime);
+			pref.setPrevElapsedTime(prevElapsedTime
+			        + (currTime - prevRecodeTime) / timeSpeed);
+		}
 		super.onPause();
 	}
 

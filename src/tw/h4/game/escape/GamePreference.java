@@ -49,18 +49,18 @@ public class GamePreference {
 	}
 
 	public long getPrevRecordTime() {
-		return pref.getLong(PREV_RECORD_TIME, -1);
+		return pref.getLong(PREV_RECORD_TIME, -1l);
 	}
 
 	public void setPrevElapsedTime(long time) {
 		Editor editor = pref.edit();
 		editor.putLong(PREV_ELAPSED_TIME, time);
 		editor.commit();
-        Debugger.d("GamePreference", "elapsed time::" + time);
+		Debugger.d("GamePreference", "elapsed time::" + time);
 	}
 
 	public long getPrevElapsedTime() {
-		return pref.getLong(PREV_ELAPSED_TIME, -1);
+		return pref.getLong(PREV_ELAPSED_TIME, 0);
 	}
 
 	public void setTimeSpeed(int speed) {
@@ -87,6 +87,8 @@ public class GamePreference {
 		Editor editor = pref.edit();
 		editor.remove(EVENT_TIME);
 		editor.remove(EVENT_TYPE);
+		editor.remove(PREV_RECORD_TIME);
+		editor.remove(PREV_ELAPSED_TIME);
 		editor.commit();
 	}
 }
