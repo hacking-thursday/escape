@@ -22,8 +22,8 @@ public class StartGameActivity extends Activity {
 		btnStart.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
-				long time = System.currentTimeMillis()
+            public void onClick(View v) {
+                long time = System.currentTimeMillis()
 				        + (long) (MAX_INTEVAL * Math.random()) * 1000;
 				AlarmHelper.getInstance(StartGameActivity.this).setNextAlarm(
 				        time);

@@ -4,28 +4,28 @@ import android.content.Context;
 
 public class Earthquake extends Disaster {
 
-	/**
-	 * @see Disaster#getHpHit()
-	 */
-	@Override
-	public int getHpHit(long t1, double lon1, double lat1, long t2,
-	        double lon2, double lat2) {
-		return 0;
-	}
+    /**
+     * @see Disaster#getHpHit()
+     */
+    @Override
+    public int getHpHit(long t1, double lon1, double lat1, long t2,
+            double lon2, double lat2) {
+        return 0;
+    }
 
-	/**
-	 * @see Disaster#getEscapeTime()
-	 */
-	@Override
-	public long getEscapeTime() {
-		return 180000l;
-	}
+    /**
+     * @see Disaster#getEscapeTime()
+     */
+    @Override
+    public long getEscapeTime() {
+        return 180000l;
+    }
 
-	/**
-	 * @see Disaster#getDisasterName(Context ctx)
-	 */
-	@Override
-	public String getDisasterName(Context ctx) {
-		return "Earthquake";
-	}
+    /**
+     * @see Disaster#getDisasterName(Context ctx)
+     */
+    @Override
+    public String getDisasterName(Context ctx) {
+        return "Earthquake";
+    }
 }

@@ -6,32 +6,32 @@ import android.content.Context;
 import android.content.Intent;
 
 public class AlarmHelper {
-	private static AlarmHelper mInstance = null;
-	private Context ctx;
-	private AlarmManager alarm = null;
-	private PendingIntent operation = null;
+    private static AlarmHelper mInstance = null;
+    private Context ctx;
+    private AlarmManager alarm = null;
+    private PendingIntent operation = null;
 
-	private AlarmHelper(Context context) {
-		ctx = context.getApplicationContext();
-		alarm = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-	}
+    private AlarmHelper(Context context) {
+        ctx = context.getApplicationContext();
+        alarm = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+    }
 
-	public static AlarmHelper getInstance(Context context) {
-		if (null == mInstance) {
-			synchronized (AlarmHelper.class) {
-				mInstance = new AlarmHelper(context);
-			}
-		}
-		return mInstance;
-	}
+    public static AlarmHelper getInstance(Context context) {
+        if (null == mInstance) {
+            synchronized (AlarmHelper.class) {
+                mInstance = new AlarmHelper(context);
+            }
+        }
+        return mInstance;
+    }
 
-	public void setNextAlarm(long time) {
-		if (null != operation) {
-			alarm.cancel(operation);
-		}
-		Intent intent = new Intent();
-		intent.setAction(SignalReceiver.DISASTER_START);
-		operation = PendingIntent.getBroadcast(ctx, 0, intent, 0);
-		alarm.set(AlarmManager.RTC_WAKEUP, time, operation);
-	}
+    public void setNextAlarm(long time) {
+        if (null != operation) {
+            alarm.cancel(operation);
+        }
+        Intent intent = new Intent();
+        intent.setAction(SignalReceiver.DISASTER_START);
+        operation = PendingIntent.getBroadcast(ctx, 0, intent, 0);
+        alarm.set(AlarmManager.RTC_WAKEUP, time, operation);
+    }
 }
