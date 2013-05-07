@@ -55,9 +55,9 @@ public class WarningActivity extends Activity {
         }
     }
 
-    private LocationListener mLocListener = new LocationListener() {
-
+    private class MyLocationListener implements LocationListener {
         public void onLocationChanged(Location location) {
+            // TODO: remove listener after get location.
             Debugger.d(TAG, "onLocationChanged");
             if (null != location) {
                 // show location on message.
@@ -66,6 +66,9 @@ public class WarningActivity extends Activity {
             } else {
                 Debugger.d(TAG, "null == location");
             }
+            Debugger.d(TAG, "remove:" + this);
+            if (null != mLocManager)
+                mLocManager.removeUpdates(this);
         }
 
         public void onProviderDisabled(String provider) {
@@ -80,8 +83,10 @@ public class WarningActivity extends Activity {
             Debugger.d(TAG, "onStatusChanged((" + provider + ")) status(("
                     + status + "))");
         }
+    }
 
-    };
+    private LocationListener mWifiLocListener = new MyLocationListener();
+    private LocationListener mGpsLocListener = new MyLocationListener();
 
     public void onClick(View view) {
         int id = view.getId();
@@ -142,16 +147,17 @@ public class WarningActivity extends Activity {
         if (null == mLocManager) {
             return;
         }
+        Debugger.d(TAG, "wifi:" + mWifiLocListener + ", gps:" + mGpsLocListener);
         try {
             mLocManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0, 0, mLocListener);
+                    LocationManager.NETWORK_PROVIDER, 0, 0, mWifiLocListener);
         } catch (Exception e) {
             Debugger.d(TAG, e.toString());
         }
 
         try {
             mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-                    0, mLocListener);
+                    0, mGpsLocListener);
         } catch (Exception e) {
             Debugger.d(TAG, e.toString());
         }
