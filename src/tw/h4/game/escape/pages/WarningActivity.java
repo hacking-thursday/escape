@@ -17,17 +17,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class WarningActivity extends Activity {
     private static final String TAG = "WarningActivity";
+    private static final int FULL_HP = 1000;
 
     private static CounterHandler mHandler = null;
     private static final int UPDATE_TIME = 0x100;
     private int reminderTime = 0;
     private boolean needRecord = true;
-    private TextView txtTimer;
+    private TextView mTxtTimer;
+    private ProgressBar mProg;
     private LocationManager mLocManager = null;
+    private GamePreference pref = null;
+    private Disaster disaster = null;
+    private int currHp = FULL_HP;
 
     private static class CounterHandler extends Handler {
         private WeakReference<WarningActivity> mTarget = null;
@@ -57,16 +63,8 @@ public class WarningActivity extends Activity {
 
     private class MyLocationListener implements LocationListener {
         public void onLocationChanged(Location location) {
-            // TODO: remove listener after get location.
             Debugger.d(TAG, "onLocationChanged");
-            if (null != location) {
-                // show location on message.
-                Debugger.d(TAG, "get location (" + location.getLatitude()
-                        + ", " + location.getLongitude() + ")");
-            } else {
-                Debugger.d(TAG, "null == location");
-            }
-            Debugger.d(TAG, "remove:" + this);
+            updateHp(location);
             if (null != mLocManager)
                 mLocManager.removeUpdates(this);
         }
@@ -105,30 +103,32 @@ public class WarningActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_warning);
         mHandler = new CounterHandler(this);
-        txtTimer = (TextView) findViewById(R.id.warn_time);
+        mTxtTimer = (TextView) findViewById(R.id.warn_time);
+        mProg = (ProgressBar) findViewById(R.id.pro_hp);
         // TODO: get location here?
         mLocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        pref = GamePreference.getInstance(WarningActivity.this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         long currTime = System.currentTimeMillis();
-        GamePreference pref = GamePreference.getInstance(WarningActivity.this);
         int timeSpeed = pref.getTimeSpeed();
         long prevElapsedTime = pref.getPrevElapsedTime();
         long prevRecodeTime = pref.getPrevRecordTime();
         int type = pref.getEventType();
-        Disaster dstr = (new DisasterEngine(this)).getDisaster(type);
+        if (null == disaster)
+            disaster = (new DisasterEngine(this)).getDisaster(type);
 
-        long escapeTime = dstr.getEscapeTime(), elaspsedTime = 0;
-        Debugger.d(TAG, "name:" + dstr.getDisasterName(this));
+        long escapeTime = disaster.getEscapeTime(), elaspsedTime = 0;
+        Debugger.d(TAG, "name:" + disaster.getDisasterName(this));
         if (-1 == prevRecodeTime) {
             prevRecodeTime = currTime;
             prevElapsedTime = 0;
         } else {
             elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
-                    / timeSpeed;
+                    * timeSpeed;
             if (elaspsedTime > escapeTime) {
                 // TODO: game over
                 Debugger.d(TAG, "Game over:" + elaspsedTime);
@@ -175,7 +175,7 @@ public class WarningActivity extends Activity {
             long prevRecodeTime = pref.getPrevRecordTime();
             pref.setPrevRecordTime(currTime);
             pref.setPrevElapsedTime(prevElapsedTime
-                    + (currTime - prevRecodeTime) / timeSpeed);
+                    + (currTime - prevRecodeTime) * timeSpeed);
         }
         super.onPause();
     }
@@ -199,6 +199,33 @@ public class WarningActivity extends Activity {
         int sec = reminderTime % 60;
         String timeString = String.format(Locale.US, "%02d:%02d:%02d", hr, min,
                 sec);
-        txtTimer.setText(timeString);
+        mTxtTimer.setText(timeString);
+    }
+
+    private void updateHp(Location location) {
+        if (null == location || null == disaster) {
+            return;
+        }
+        Debugger.d(TAG, "get location (" + location.getLatitude() + ", "
+                + location.getLongitude() + ")");
+        double prevLat = pref.getPrevLatitude();
+        double prevLon = pref.getPrevLongitude();
+        long prevTime = pref.getPrevRecordTime();
+        long elapsedTime = pref.getPrevElapsedTime();
+        long currTime = System.currentTimeMillis();
+        double currLat = location.getLatitude();
+        double currLon = location.getLongitude();
+        int timeSpeed = pref.getTimeSpeed();
+
+        currHp -= disaster.getHpHit(prevTime, prevLon, prevLat, currTime,
+                currLon, currLat);
+        // TODO: set a progress bar as hit-point.
+        mProg.setProgress(currHp);
+        // TODO: restore info here.
+        pref.setPrevRecordTime(currTime);
+        pref.setPrevLatitude(currLat);
+        pref.setPrevLongitude(currLon);
+        elapsedTime += (currTime - prevTime) * timeSpeed;
+        pref.setPrevElapsedTime(elapsedTime);
     }
 }

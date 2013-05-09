@@ -12,6 +12,8 @@ public class GamePreference {
     private static final String PREV_RECORD_TIME = PREFIX + "PREV_RECORD_TIME";
     private static final String PREV_ELAPSED_TIME = PREFIX
             + "PREV_ELAPSED_TIME";
+    private static final String PREV_LONGITUDE = PREFIX + "PREV_LONGITUDE";
+    private static final String PREV_LATITUDE = PREFIX + "PREV_LATITUDE";
     private static final String TIME_SPEED = PREFIX + "TIME_SPEED";
 
     private SharedPreferences pref;
@@ -61,6 +63,26 @@ public class GamePreference {
 
     public long getPrevElapsedTime() {
         return pref.getLong(PREV_ELAPSED_TIME, 0);
+    }
+
+    public void setPrevLatitude(double latitude) {
+        Editor editor = pref.edit();
+        editor.putFloat(PREV_LATITUDE, (float) latitude);
+        editor.commit();
+    }
+
+    public double getPrevLatitude() {
+        return pref.getFloat(PREV_LATITUDE, 0);
+    }
+
+    public void setPrevLongitude(double longitude) {
+        Editor editor = pref.edit();
+        editor.putFloat(PREV_LONGITUDE, (float) longitude);
+        editor.commit();
+    }
+
+    public double getPrevLongitude() {
+        return pref.getFloat(PREV_LONGITUDE, 0);
     }
 
     public void setTimeSpeed(int speed) {
