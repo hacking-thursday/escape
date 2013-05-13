@@ -111,6 +111,8 @@ public class GamePreference {
         editor.remove(EVENT_TYPE);
         editor.remove(PREV_RECORD_TIME);
         editor.remove(PREV_ELAPSED_TIME);
+        editor.remove(PREV_LONGITUDE);
+        editor.remove(PREV_LATITUDE);
         editor.commit();
     }
 }

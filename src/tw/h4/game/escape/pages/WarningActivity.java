@@ -28,6 +28,7 @@ public class WarningActivity extends Activity {
     private static final int UPDATE_TIME = 0x100;
     private int reminderTime = 0;
     private boolean needRecord = true;
+    private boolean gameOver = false;
     private TextView mTxtTimer;
     private ProgressBar mProg;
     private LocationManager mLocManager = null;
@@ -130,8 +131,10 @@ public class WarningActivity extends Activity {
             elaspsedTime = prevElapsedTime + (currTime - prevRecodeTime)
                     * timeSpeed;
             if (elaspsedTime > escapeTime) {
-                // TODO: game over
+                // game over
                 Debugger.d(TAG, "Game over:" + elaspsedTime);
+                gameOver = true;
+                mTxtTimer.setText(R.string.time_up);
                 return;
             }
         }
@@ -200,6 +203,14 @@ public class WarningActivity extends Activity {
         String timeString = String.format(Locale.US, "%02d:%02d:%02d", hr, min,
                 sec);
         mTxtTimer.setText(timeString);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (gameOver) {
+            pref.removeEvent();
+        }
+        super.onBackPressed();
     }
 
     private void updateHp(Location location) {

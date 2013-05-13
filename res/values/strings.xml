@@ -10,6 +10,7 @@
         Do you want to play now?</string>
     <string name="warn_msg">Something happen!</string>
     <string name="waiting_msg">Disaster will happen at any time.</string>
+    <string name="time_up">"Time's up"</string>
 
     <!-- disaster name -->
     <string name="disaster_happen">%s happens!</string>
