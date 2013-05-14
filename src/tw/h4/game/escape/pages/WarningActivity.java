@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 public class WarningActivity extends Activity {
     private static final String TAG = "WarningActivity";
-    private static final int FULL_HP = 1000;
 
     private static CounterHandler mHandler = null;
     private static final int UPDATE_TIME = 0x100;
@@ -34,7 +33,6 @@ public class WarningActivity extends Activity {
     private LocationManager mLocManager = null;
     private GamePreference pref = null;
     private Disaster disaster = null;
-    private int currHp = FULL_HP;
 
     private static class CounterHandler extends Handler {
         private WeakReference<WarningActivity> mTarget = null;
@@ -52,7 +50,7 @@ public class WarningActivity extends Activity {
                 // TODO: update time counter
                 targetObj.showTimer();
                 targetObj.reminderTime--;
-                if (0 == targetObj.reminderTime) {
+                if (0 > targetObj.reminderTime) {
                     removeCallbacks(action);
                     targetObj.showTimeUp();
                 } else {
@@ -115,6 +113,7 @@ public class WarningActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        mProg.setProgress(pref.getCurrHp());
         long currTime = System.currentTimeMillis();
         int timeSpeed = pref.getTimeSpeed();
         long prevElapsedTime = pref.getPrevElapsedTime();
@@ -170,7 +169,7 @@ public class WarningActivity extends Activity {
     protected void onPause() {
         if (needRecord) {
             mHandler.removeCallbacks(action);
-            // TODO: save elapsed time
+            // save elapsed time
             long currTime = System.currentTimeMillis();
             GamePreference pref = GamePreference
                     .getInstance(WarningActivity.this);
@@ -181,6 +180,8 @@ public class WarningActivity extends Activity {
             pref.setPrevElapsedTime(prevElapsedTime
                     + (currTime - prevRecodeTime) * timeSpeed);
         }
+        mLocManager.removeUpdates(mGpsLocListener);
+        mLocManager.removeUpdates(mWifiLocListener);
         super.onPause();
     }
 
@@ -216,6 +217,7 @@ public class WarningActivity extends Activity {
 
     private void showTimeUp() {
         gameOver = true;
+        needRecord = false;
         mTxtTimer.setText(R.string.time_up);
     }
 
@@ -233,11 +235,13 @@ public class WarningActivity extends Activity {
         double currLat = location.getLatitude();
         double currLon = location.getLongitude();
         int timeSpeed = pref.getTimeSpeed();
+        int currHp = pref.getCurrHp();
 
         currHp -= disaster.getHpHit(prevTime, prevLon, prevLat, currTime,
                 currLon, currLat);
         // TODO: set a progress bar as hit-point.
         mProg.setProgress(currHp);
+        pref.setCurrHp(currHp);
         // TODO: restore info here.
         pref.setPrevRecordTime(currTime);
         pref.setPrevLatitude(currLat);

@@ -14,6 +14,7 @@ public class GamePreference {
             + "PREV_ELAPSED_TIME";
     private static final String PREV_LONGITUDE = PREFIX + "PREV_LONGITUDE";
     private static final String PREV_LATITUDE = PREFIX + "PREV_LATITUDE";
+    private static final String CURR_HP = PREFIX + "CURR_HP";
     private static final String TIME_SPEED = PREFIX + "TIME_SPEED";
 
     private SharedPreferences pref;
@@ -105,6 +106,16 @@ public class GamePreference {
         return pref.getInt(EVENT_TYPE, 0);
     }
 
+    public void setCurrHp(int hp) {
+        Editor editor = pref.edit();
+        editor.putInt(CURR_HP, hp);
+        editor.commit();
+    }
+
+    public int getCurrHp() {
+        return pref.getInt(CURR_HP, 1000);
+    }
+
     public void removeEvent() {
         Editor editor = pref.edit();
         editor.remove(EVENT_TIME);
@@ -113,6 +124,7 @@ public class GamePreference {
         editor.remove(PREV_ELAPSED_TIME);
         editor.remove(PREV_LONGITUDE);
         editor.remove(PREV_LATITUDE);
+        editor.remove(CURR_HP);
         editor.commit();
     }
 }
