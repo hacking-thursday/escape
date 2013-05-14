@@ -54,6 +54,7 @@ public class WarningActivity extends Activity {
                 targetObj.reminderTime--;
                 if (0 == targetObj.reminderTime) {
                     removeCallbacks(action);
+                    targetObj.showTimeUp();
                 } else {
                     targetObj.startTimer(1000);
                 }
@@ -133,8 +134,7 @@ public class WarningActivity extends Activity {
             if (elaspsedTime > escapeTime) {
                 // game over
                 Debugger.d(TAG, "Game over:" + elaspsedTime);
-                gameOver = true;
-                mTxtTimer.setText(R.string.time_up);
+                showTimeUp();
                 return;
             }
         }
@@ -166,6 +166,7 @@ public class WarningActivity extends Activity {
         }
     }
 
+    @Override
     protected void onPause() {
         if (needRecord) {
             mHandler.removeCallbacks(action);
@@ -183,6 +184,14 @@ public class WarningActivity extends Activity {
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (gameOver) {
+            pref.removeEvent();
+        }
+        super.onBackPressed();
+    }
+
     private static Runnable action = new Runnable() {
         @Override
         public void run() {
@@ -196,7 +205,7 @@ public class WarningActivity extends Activity {
         mHandler.postDelayed(action, interval);
     }
 
-    public void showTimer() {
+    private void showTimer() {
         int hr = reminderTime / 3600;
         int min = (reminderTime % 3600) / 60;
         int sec = reminderTime % 60;
@@ -205,12 +214,9 @@ public class WarningActivity extends Activity {
         mTxtTimer.setText(timeString);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (gameOver) {
-            pref.removeEvent();
-        }
-        super.onBackPressed();
+    private void showTimeUp() {
+        gameOver = true;
+        mTxtTimer.setText(R.string.time_up);
     }
 
     private void updateHp(Location location) {
