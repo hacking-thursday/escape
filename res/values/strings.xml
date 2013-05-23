@@ -3,11 +3,13 @@
 
     <string name="app_name">Escape</string>
     <string name="greeting">Escape!</string>
-    <string name="check_start_game">This game will simulate a disaster happens. 
-        When the disaster comes, you need to move in the real world to escape that. 
-        And you know, disaster may happen at any time. 
+    <string name="check_start_game">This game will simulate a disaster happens.
+        When the disaster comes, you need to move in the real world to escape
+        that.
+        And you know, disaster may happen at any time.
         So this game will send a warning at any time in the next 24 hours.
-        Do you want to play now?</string>
+        Do you want to play now?
+    </string>
     <string name="warn_msg">Something happen!</string>
     <string name="waiting_msg">Disaster will happen at any time.</string>
     <string name="time_up">"Time's up"</string>

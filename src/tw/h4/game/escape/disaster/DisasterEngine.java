@@ -15,6 +15,10 @@ public class DisasterEngine {
         public Class<? extends Disaster> getTypeClass() {
             return kls;
         }
+
+        static public int getTotalCount() {
+            return Type.values().length;
+        }
     }
 
     private Context mCtx;
