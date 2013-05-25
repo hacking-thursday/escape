@@ -22,6 +22,7 @@ public class StartGameActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                // Add 1 sec for at least has 1 sec.
                 long time = System.currentTimeMillis()
                         + (long) (MAX_INTERVAL * Math.random() + 1) * 1000;
                 AlarmHelper.getInstance(StartGameActivity.this).setNextAlarm(

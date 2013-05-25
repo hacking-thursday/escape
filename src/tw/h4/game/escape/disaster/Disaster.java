@@ -8,6 +8,12 @@ import android.content.Context;
  * @author asil
  */
 public abstract class Disaster {
+    /**
+     *
+     */
+    public interface DisasterLevel {
+        public int getLevelCount();
+    }
     protected double mSrcLongitude;
     protected double mSrcLatitude;
     protected long mActionTime;

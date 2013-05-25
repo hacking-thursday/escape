@@ -9,6 +9,7 @@ public class GamePreference {
     private static final String PREF_NAME = "tw.h4.game.escape_preferences";
     private static final String EVENT_TIME = PREFIX + "EVENT_TIME";
     private static final String EVENT_TYPE = PREFIX + "EVENT_TYPE";
+    private static final String EVENT_LEVEL = PREFIX + "EVENT_LEVEL";
     private static final String PREV_RECORD_TIME = PREFIX + "PREV_RECORD_TIME";
     private static final String PREV_ELAPSED_TIME = PREFIX
             + "PREV_ELAPSED_TIME";
@@ -106,6 +107,16 @@ public class GamePreference {
         return pref.getInt(EVENT_TYPE, 0);
     }
 
+    public void setEventLevel(int type) {
+        Editor editor = pref.edit();
+        editor.putInt(EVENT_LEVEL, type);
+        editor.commit();
+    }
+
+    public int getEventLevel() {
+        return pref.getInt(EVENT_LEVEL, 0);
+    }
+
     public void setCurrHp(int hp) {
         Editor editor = pref.edit();
         editor.putInt(CURR_HP, hp);
@@ -120,6 +131,7 @@ public class GamePreference {
         Editor editor = pref.edit();
         editor.remove(EVENT_TIME);
         editor.remove(EVENT_TYPE);
+        editor.remove(EVENT_LEVEL);
         editor.remove(PREV_RECORD_TIME);
         editor.remove(PREV_ELAPSED_TIME);
         editor.remove(PREV_LONGITUDE);
