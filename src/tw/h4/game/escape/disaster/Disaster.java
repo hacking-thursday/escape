@@ -1,19 +1,15 @@
 package tw.h4.game.escape.disaster;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * This class defines a disaster behavior and member.
  *
  * @author asil
  */
-public abstract class Disaster {
-    /**
-     *
-     */
-    public interface DisasterLevel {
-        public int getLevelCount();
-    }
+public abstract class Disaster implements Parcelable {
     protected double mSrcLongitude;
     protected double mSrcLatitude;
     protected long mActionTime;
@@ -49,4 +45,22 @@ public abstract class Disaster {
      * @return The name of current disaster.
      */
     public abstract String getDisasterName(Context ctx);
+
+    /**
+     * Get all levels count.
+     * @return How many count of levels in this disaster.
+     */
+    public abstract int getLevelCount();
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(mLevel);
+        out.writeDouble(mSrcLongitude);
+        out.writeDouble(mSrcLatitude);
+        out.writeLong(mActionTime);
+    }
 }

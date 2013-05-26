@@ -3,9 +3,18 @@ package tw.h4.game.escape.disaster;
 import android.content.Context;
 
 public class VolcanicEruptions extends Disaster {
-
+    public enum Level {
+        LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4;
+    }
     /**
-     * @see Disaster#getHpHit()
+     * @see Disaster#getLevelCount()
+     */
+    public int getLevelCount() {
+        int length = Level.values().length;
+        return length;
+    }
+    /**
+     * @see Disaster#getHpHit(long, double, double, long, double, double)
      */
     @Override
     public int getHpHit(long t1, double lon1, double lat1, long t2,
@@ -23,7 +32,7 @@ public class VolcanicEruptions extends Disaster {
     }
 
     /**
-     * @see Disaster#getDisasterName(Context ctx)
+     * @see Disaster#getDisasterName(android.content.Context)
      */
     @Override
     public String getDisasterName(Context ctx) {
